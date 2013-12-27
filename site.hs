@@ -2,6 +2,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 import           Data.Monoid (mappend)
 import           Hakyll
+import           Data.Char (isAscii, isSpace)
 
 
 --------------------------------------------------------------------------------
@@ -26,6 +27,7 @@ main = hakyll $ do
                     defaultContext
 
             pandocCompiler
+                >>= stripNbspCompiler
                 >>= applyAsTemplate indexCtx
                 >>= loadAndApplyTemplate "templates/default.html" indexCtx
                 >>= relativizeUrls
@@ -33,7 +35,14 @@ main = hakyll $ do
     match pagesPattern $ version "menu" $ do
         route $ setExtension "html"
         compile getResourceBody
-      
+
+stripNbspCompiler :: Item String -> Compiler (Item String)
+stripNbspCompiler = return . fmap stripNbsp
+
+-- remove funny unicode spaces
+stripNbsp = map go
+  where go x | not (isAscii x) && isSpace x = ' '
+        go x | otherwise = x
 
 pagesPattern = "*.html" .||. "*.markdown"
 --------------------------------------------------------------------------------
