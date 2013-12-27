@@ -1,0 +1,193 @@
+/*
+_______________________________
+Desktop version layout - place your custom code here */
+
+body {
+background:#eeeeee;
+}
+
+@font-face{
+    font-family:"TriodPostnaja";
+    src: url(../../docs/TriodPostnaja.ttf) format("truetype");
+}
+
+h1,h2,h3,.navigation{
+   font-weight:normal;
+   font-family:"TriodPostnaja";
+}
+
+h1{
+   font-size: 2.5em;
+   margin-top:0;
+}
+
+h2{
+   margin-top:1em;
+}
+
+h3{
+   margin-top:0.5em;
+}
+
+h4{
+   font-size:1em;
+}
+
+.title {
+   text-align: center;
+   border-bottom:solid #bbb 1px;
+   padding:1em;
+}
+
+.navigation {
+   padding:  1em;
+   list-style:none;
+   text-align:right;
+   direction:rtl;
+   border-right:solid #bbb 1px;
+   border-bottom:solid #bbb 1px;
+}
+
+.navigation li {
+   margin-left:0;
+   margin-right:0.5em;
+   margin-bottom:0.3em;
+   color:#444;
+}
+
+.navigation a {
+   color:#444;
+   font-size: 1.3em;
+}
+
+li.current {
+   list-style:disc;
+}
+
+.contact {
+   border-right:solid #bbb 1px;
+   border-top:solid #bbb 1px;
+   padding-right:  1em;
+   padding-bottom:  1em;
+   word-wrap:break-word;
+}
+
+.contact p{
+   font-size: 0.8em;
+}
+
+.contact h3{
+   text-align:center;
+   margin-bottom: 1em;
+}
+
+.contact h4{
+   border-bottom: 1px dashed;
+}
+
+.contact img{
+   margin-left:3em;
+   margin-right:auto;
+   margin-bottom:0
+}
+
+.images {
+   margin-top: 2em;
+}
+.image-wrapper{
+   margin-left:auto;
+   margin-right:auto;
+}
+
+.image-wrapper img{
+   display:block;
+   margin-bottom:0;
+}
+
+.image-wrapper p{
+   text-align:center;
+   font-size:0.8em;
+   border-color:#ccc;
+   border-style:dashed;
+   border-width:0px 1px 1px 1px;
+}
+
+.announce {
+   border-top:solid #bbb 1px;
+   border-bottom:solid #bbb 1px;
+   border-left:solid #bbb 1px;
+   padding-left:  1em;
+   padding-bottom:  1em;
+}
+.announce h3{
+   text-align:center;
+   margin-bottom: 1em;
+}
+
+.announce h4{
+   display:inline;
+}
+
+.announce p{
+   font-size: 0.8em;
+}
+
+.announce .content {
+   border-top: 1px dashed;
+}
+
+.announce .date {
+   float: right;
+   margin:  0;
+}
+
+/*
+_______________________________
+Mobile version - preset code from cssgrid.net */
+
+@media handheld, only screen and (max-width: 767px) {
+
+	.examplecontainer {}
+
+	body {}
+	
+   .navigation {
+      border-left:solid #bbb 1px;
+      text-align:center;
+      direction:  ltr;
+      padding: 1em;
+   }
+
+   .navigation a{
+      font-size:1.2em;
+      white-space:pre;
+   }
+
+   .navigation li{
+      display:inline;
+      line-height:3em;
+      margin:1em;
+   }
+
+   .announce {
+      border-right:solid #bbb 1px;
+      padding:1em;
+   }
+
+}
+
+
+/*
+_______________________________
+Provide higher res assets for iPhone 4 - preset code from cssgrid.net */
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2) { 
+
+	/* An example of how to override an image with one twice the size for iPhone 4. Specify the original pixel size with background-size.
+	.download {
+	background: url(../img/downarrow@2x.png) no-repeat;
+	background-size: 27px 28px;
+	}
+	*/
+
+}
