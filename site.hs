@@ -17,24 +17,25 @@ main = hakyll $ do
 
     match "templates/*" $ compile templateCompiler
 
-    match "*.html" $ do
-        route idRoute
+    match pagesPattern $ do
+        route $ setExtension "html"
         compile $ do
-            pages <- loadAll ("*.html" .&&. hasVersion "menu")
+            pages <- loadAll (pagesPattern .&&. hasVersion "menu")
             let indexCtx =
                     listField "pages" defaultContext (return pages) `mappend`
                     defaultContext
 
-            getResourceBody
+            pandocCompiler
                 >>= applyAsTemplate indexCtx
                 >>= loadAndApplyTemplate "templates/default.html" indexCtx
                 >>= relativizeUrls
 
-    match "*.html" $ version "menu" $ do
-        route idRoute
+    match pagesPattern $ version "menu" $ do
+        route $ setExtension "html"
         compile getResourceBody
       
 
+pagesPattern = "*.html" .||. "*.markdown"
 --------------------------------------------------------------------------------
 postCtx :: Context String
 postCtx =
