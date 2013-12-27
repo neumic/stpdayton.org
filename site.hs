@@ -20,8 +20,7 @@ main = hakyll $ do
     match "*.html" $ do
         route idRoute
         compile $ do
-            saveSnapshot "foo"
-            pages <- loadSnapshot "*.html" "foo"
+            pages <- loadAll ("*.html" .&&. hasVersion "menu")
             let indexCtx =
                     listField "pages" defaultContext (return pages) `mappend`
                     defaultContext
@@ -30,6 +29,10 @@ main = hakyll $ do
                 >>= applyAsTemplate indexCtx
                 >>= loadAndApplyTemplate "templates/default.html" indexCtx
                 >>= relativizeUrls
+
+    match "*.html" $ version "menu" $ do
+        route idRoute
+        compile getResourceBody
       
 
 --------------------------------------------------------------------------------
