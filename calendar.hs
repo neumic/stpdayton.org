@@ -81,8 +81,15 @@ weekdays = map fst $ wDays defaultTimeLocale
 -- USAGE: ./calendar <year> <month>
 -- outputs at calendar.html
 main = do
-    [ys, ms] <- getArgs
+    args <- getArgs
+    case args of
+        [ys, ms] -> doIt ys ms
+        _ -> showUsage
+
+doIt ys ms = do
     let y = read ys
         m = read ms
         cal = renderMonth y m
     writeFile "calendar.html" (renderHtml cal)
+
+showUsage = putStrLn "Usage: ./calendar <year> <month>"
