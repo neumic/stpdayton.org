@@ -33,6 +33,7 @@ main = hakyll $ do
                 >>= relativizeUrls
 
     match pagesPattern $ version "menu" $ do
+        route $ setExtension "html"
         compile getResourceBody
 
 stripNbspCompiler :: Item String -> Compiler (Item String)
