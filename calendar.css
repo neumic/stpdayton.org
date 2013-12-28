@@ -1,1 +1,1 @@
-td { width: 100px;    height:80px;    border: 1px solid black;    vertical-align: top;}.fast { background-color: pink }
+td { width: 100px;    height:80px;    border-left: 1px solid black;    border-top: 1px solid black;    vertical-align: top;    padding: 0;}td a { float: right; }.fast { background-color: pink }

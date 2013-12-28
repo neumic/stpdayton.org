@@ -7,6 +7,7 @@ import Text.Blaze.Html5 hiding (map)
 import Text.Blaze.Html5.Attributes
 import Text.Blaze.Renderer.Utf8 (renderMarkup)
 import qualified Data.ByteString.Lazy as B
+import System.Locale
 
 
 weeksOfMonth :: Integer -> Int -> [[Day]]
@@ -55,12 +56,19 @@ renderWeek m w = tr . toMarkup $ map (renderDay m) w
 
 
 renderMonth :: Int -> [[Day]] -> Markup
-renderMonth mId m = table . toMarkup $ map (renderWeek mId) m
+renderMonth mId m = table $ do
+   calHeader
+   toMarkup $ map (renderWeek mId) m
 
 
 isWedFri :: Day -> Bool
 isWedFri d = x == 3 || x == 5
   where x = snd $ sundayStartWeek d
+
+
+calHeader = tr $ mapM_ (th . toMarkup) weekdays
+
+weekdays = map fst $ wDays defaultTimeLocale
 
 testMonth = weeksOfMonth 2013 12
 testMarkup = do
