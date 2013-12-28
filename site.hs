@@ -49,26 +49,34 @@ main = hakyll $ do
         compile getResourceBody
 
 
-
-
+-- Fetch and parse the RSS feed.
 getFeed :: IO FT.Feed
 getFeed = do
     k <- simpleHttp "https://frted.wordpress.com/feed/"
     let Just f = FI.parseFeedString $ BLC.unpack k
     return f
 
+-- Context for a Feed (a list of posts). Takes the Feed object.
 feedListCtx :: FT.Feed -> Context String
 feedListCtx f = listField "posts" feedPostCtx posts
   where posts = return $ map mkItem $ FQ.feedItems f
 
+-- Context of an individual post
 feedPostCtx :: Context FT.Item
 feedPostCtx = feedField "title" FQ.getItemTitle `mappend`
               feedField "url" FQ.getItemLink `mappend`
               -- feedField "date" (fmap (formatTime defaultTimeLocale "%D" :: UTCTime -> String) . join . FQ.getItemPublishDate)
               field "date" (return . (formatTime defaultTimeLocale "%D" :: UTCTime -> String) . fromJust . join . FQ.getItemPublishDate . itemBody)
 
+-- Helper to make context fields from feed items
+--feedField :: String -> FQ.ItemGetter String -> Context FT.Item
+feedField :: String -> (a -> Maybe String) -> Context a
 feedField name accessor = field name (return . fromJust . accessor . itemBody)
 
+-- Used to make Items, which are needed for listField
+-- Items have an Identifier along with their content.
+-- Here, we use the link, interpreted as a file path
+-- Sketchy?
 mkItem :: FT.Item -> Item FT.Item
 mkItem i = Item (fromFilePath . fromJust $ FQ.getItemLink i) i
 
