@@ -6,9 +6,11 @@ import Data.Time.Format
 import Data.List (nub)
 import Text.Blaze.Html5 hiding (map)
 import Text.Blaze.Html5.Attributes
-import Text.Blaze.Renderer.Utf8 (renderMarkup)
+import Text.Blaze.Html.Renderer.Utf8
 import qualified Data.ByteString.Lazy as B
+import qualified Data.ByteString as BS
 import System.Locale
+import System.Environment
 
 
 weeksOfMonth :: Integer -> Int -> [[Day]]
@@ -76,9 +78,12 @@ calHeader = tr $ mapM_ (th . toMarkup) weekdays
 
 weekdays = map fst $ wDays defaultTimeLocale
 
-testMarkup = do
-    Text.Blaze.Html5.head $ link ! rel "stylesheet" ! href "calendar.css"
-    renderMonth 2013 12
-testRendered = renderMarkup testMarkup
 
-writeTest = B.writeFile "/tmp/foo.html" testRendered
+-- USAGE: ./calendar <year> <month>
+-- outputs at calendar.html
+main = do
+    [ys, ms] <- getArgs
+    let y = read ys
+        m = read ms
+        cal = renderMonth y m
+    renderHtmlToByteStringIO (BS.writeFile "calendar.html") cal
