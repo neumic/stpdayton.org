@@ -10,6 +10,7 @@ import Text.Blaze.Html.Renderer.Pretty
 import qualified Data.ByteString.Lazy as B
 import System.Locale
 import System.Environment
+import Control.Monad (when)
 
 
 weeksOfMonth :: Integer -> Int -> [[Day]]
@@ -90,6 +91,7 @@ doIt ys ms = do
     let y = read ys
         m = read ms
         cal = renderMonth y m
+    when (m < 1 || m > 12) (error "month not in range 1-12")
     writeFile "calendar.html" (renderHtml cal)
 
 showUsage = putStrLn "Usage: ./calendar <year> <month>"
