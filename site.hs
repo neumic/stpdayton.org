@@ -9,6 +9,10 @@ import qualified Text.Feed.Types as FT
 import           Network.HTTP.Conduit
 import qualified Data.ByteString.Lazy.Char8 as BLC
 import           Data.Maybe (fromJust)
+import Control.Monad (join)
+import Data.Time.Format
+import System.Locale
+import Data.Time.Clock
 
 
 --------------------------------------------------------------------------------
@@ -60,7 +64,9 @@ feedListCtx f = listField "posts" feedPostCtx posts
 
 feedPostCtx :: Context FT.Item
 feedPostCtx = feedField "title" FQ.getItemTitle `mappend`
-              feedField "url" FQ.getItemLink
+              feedField "url" FQ.getItemLink `mappend`
+              -- feedField "date" (fmap (formatTime defaultTimeLocale "%D" :: UTCTime -> String) . join . FQ.getItemPublishDate)
+              field "date" (return . (formatTime defaultTimeLocale "%D" :: UTCTime -> String) . fromJust . join . FQ.getItemPublishDate . itemBody)
 
 feedField name accessor = field name (return . fromJust . accessor . itemBody)
 
