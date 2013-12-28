@@ -11,6 +11,8 @@ import qualified Data.ByteString.Lazy as B
 import System.Locale
 import System.Environment
 import Control.Monad (when)
+import Data.Maybe (fromMaybe)
+--import Text.Read (readMaybe)
 
 
 weeksOfMonth :: Integer -> Int -> [[Day]]
@@ -88,10 +90,14 @@ main = do
         _ -> showUsage
 
 doIt ys ms = do
-    let y = read ys
-        m = read ms
+    let y = fromMaybe (error "couldn't parse year") (readMaybe ys)
+        m = fromMaybe (error "couldn't parse month") (readMaybe ms)
         cal = renderMonth y m
     when (m < 1 || m > 12) (error "month not in range 1-12")
     writeFile "calendar.html" (renderHtml cal)
 
 showUsage = putStrLn "Usage: ./calendar <year> <month>"
+
+readMaybe s = case reads s of
+                   [(x, "")] -> Just x
+                   _ -> Nothing
