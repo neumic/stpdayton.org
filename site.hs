@@ -3,6 +3,12 @@
 import           Data.Monoid (mappend)
 import           Hakyll
 import           Data.Char (isAscii, isSpace)
+import qualified Text.Feed.Import as FI
+import qualified Text.Feed.Query as FQ
+import qualified Text.Feed.Types as FT
+import           Network.HTTP.Conduit
+import qualified Data.ByteString.Lazy.Char8 as BLC
+import           Data.Maybe (fromJust)
 
 
 --------------------------------------------------------------------------------
@@ -18,12 +24,15 @@ main = hakyll $ do
 
     match "templates/*" $ compile templateCompiler
 
+    f <- preprocess getFeed
+
     match pagesPattern $ do
         route $ setExtension "html"
         compile $ do
             pages <- loadAll (pagesPattern .&&. hasVersion "menu")
             let indexCtx =
                     listField "pages" defaultContext (return pages) `mappend`
+                    feedListCtx f `mappend`
                     defaultContext
 
             pandocCompiler
@@ -35,6 +44,28 @@ main = hakyll $ do
     match pagesPattern $ version "menu" $ do
         route $ setExtension "html"
         compile getResourceBody
+
+
+
+
+getFeed :: IO FT.Feed
+getFeed = do
+    k <- simpleHttp "https://frted.wordpress.com/feed/"
+    let Just f = FI.parseFeedString $ BLC.unpack k
+    return f
+
+feedListCtx :: FT.Feed -> Context String
+feedListCtx f = listField "posts" feedPostCtx posts
+  where posts = return $ map mkItem $ FQ.feedItems f
+
+feedPostCtx :: Context FT.Item
+feedPostCtx = feedField "title" FQ.getItemTitle `mappend`
+              feedField "url" FQ.getItemLink
+
+feedField name accessor = field name (return . fromJust . accessor . itemBody)
+
+mkItem :: FT.Item -> Item FT.Item
+mkItem i = Item (fromFilePath . fromJust $ FQ.getItemLink i) i
 
 stripNbspCompiler :: Item String -> Compiler (Item String)
 stripNbspCompiler = return . fmap stripNbsp
