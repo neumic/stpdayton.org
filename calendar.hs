@@ -35,14 +35,15 @@ renderDay m d | otherwise    = td ! classValue $ content
             toHtml $ day d
             a ! href (readingLink d) $ "Readings"
 
--- need to figure out what all params are
--- year?
-readingLink d = toValue $ concat
-    [ "http://oca.org/Reading.asp?SID=25&id=&m="
-    , show (month d)
-    , "&D="
-    , show (day d)
+readingLink x = toValue $ concat
+    [ "http://oca.org/readings/daily/"
+    , show y
+    , "/"
+    , show m
+    , "/"
+    , show d
     ]
+  where (y,m,d) = toGregorian x
 
 fast = class_ "fast"
 nofast = class_ "nofast"
