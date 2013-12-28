@@ -1,5 +1,6 @@
 site
-site.hi
-site.o
+calendar
+*.hi
+*.o
 _site/
 _cache/
