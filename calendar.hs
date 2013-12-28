@@ -33,6 +33,7 @@ renderDay m d | otherwise    = td ! classValue $ content
                                    else nofast
         content = do
             toHtml $ day d
+            br
             a ! href (readingLink d) $ "Readings"
 
 readingLink x = toValue $ concat
