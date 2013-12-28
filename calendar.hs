@@ -6,9 +6,8 @@ import Data.Time.Format
 import Data.List (nub)
 import Text.Blaze.Html5 hiding (map)
 import Text.Blaze.Html5.Attributes
-import Text.Blaze.Html.Renderer.Utf8
+import Text.Blaze.Html.Renderer.Pretty
 import qualified Data.ByteString.Lazy as B
-import qualified Data.ByteString as BS
 import System.Locale
 import System.Environment
 
@@ -86,4 +85,4 @@ main = do
     let y = read ys
         m = read ms
         cal = renderMonth y m
-    renderHtmlToByteStringIO (BS.writeFile "calendar.html") cal
+    writeFile "calendar.html" (renderHtml cal)
