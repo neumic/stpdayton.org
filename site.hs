@@ -40,7 +40,6 @@ main = hakyll $ do
 
             pandocCompiler
                 >>= stripNbspCompiler
-                >>= applyAsTemplate indexCtx
                 >>= loadAndApplyTemplate "templates/default.html" indexCtx
                 >>= relativizeUrls
 

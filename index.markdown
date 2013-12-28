@@ -12,7 +12,7 @@ ourselves to you!
 The Sunday evening group (5 PM at the church) will be beginning to discuss
 David Bell's book *Many Mansions: An Introduction to the Development and
 Diversity of Medieval Theology* in mid January. Copies are now available from
-Fr. Ted (cost is $$23.) The Wednesday morning group (11 AM at the church)  is
+Fr. Ted (cost is $23.) The Wednesday morning group (11 AM at the church)  is
 reading Etienne Charpentier's *How To Read the New Testament*.
 
 On Sunday mornings during Fellowship hour a group of those with a special
