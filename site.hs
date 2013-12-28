@@ -28,12 +28,11 @@ main = hakyll $ do
 
     match "templates/*" $ compile templateCompiler
 
-    f <- preprocess getFeed
-
     match pagesPattern $ do
         route $ setExtension "html"
         compile $ do
             pages <- loadAll (pagesPattern .&&. hasVersion "menu")
+            f <- unsafeCompiler getFeed
             let indexCtx =
                     listField "pages" defaultContext (return pages) `mappend`
                     feedListCtx f `mappend`
