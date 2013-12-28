@@ -28,6 +28,17 @@ main = hakyll $ do
 
     match "templates/*" $ compile templateCompiler
 
+    match "calendar.html" $ do
+        route idRoute
+        compile $ do
+            pages <- loadAll (pagesPattern .&&. hasVersion "menu")
+            let indexCtx =
+                    listField "pages" defaultContext (return pages) `mappend`
+                    defaultContext
+            getResourceBody
+                >>= loadAndApplyTemplate "templates/calendar.html" indexCtx
+                >>= relativizeUrls
+
     match pagesPattern $ do
         route $ setExtension "html"
         compile $ do
