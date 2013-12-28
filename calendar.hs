@@ -2,6 +2,7 @@
 
 import Data.Time.Calendar
 import Data.Time.Calendar.OrdinalDate
+import Data.Time.Format
 import Data.List (nub)
 import Text.Blaze.Html5 hiding (map)
 import Text.Blaze.Html5.Attributes
@@ -55,10 +56,15 @@ renderWeek :: Int -> [Day] -> Markup
 renderWeek m w = tr . toMarkup $ map (renderDay m) w
 
 
-renderMonth :: Int -> [[Day]] -> Markup
-renderMonth mId m = table $ do
-   calHeader
-   toMarkup $ map (renderWeek mId) m
+renderMonthTable :: Int -> [[Day]] -> Markup
+renderMonthTable mId m = table $ do
+    calHeader
+    toMarkup $ map (renderWeek mId) m
+
+renderMonth :: Integer -> Int -> Markup
+renderMonth y m = do
+    h3 $ toMarkup $ formatTime defaultTimeLocale "%B %Y" (fromGregorian y m 1)
+    renderMonthTable m (weeksOfMonth y m)
 
 
 isWedFri :: Day -> Bool
@@ -70,10 +76,9 @@ calHeader = tr $ mapM_ (th . toMarkup) weekdays
 
 weekdays = map fst $ wDays defaultTimeLocale
 
-testMonth = weeksOfMonth 2013 12
 testMarkup = do
     Text.Blaze.Html5.head $ link ! rel "stylesheet" ! href "calendar.css"
-    renderMonth 12 testMonth
+    renderMonth 2013 12
 testRendered = renderMarkup testMarkup
 
 writeTest = B.writeFile "/tmp/foo.html" testRendered
